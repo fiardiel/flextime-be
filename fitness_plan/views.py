@@ -7,12 +7,12 @@ from fitness_plan.serializers import FitnessPlanSerializer, TrainingSerializer, 
 class FitnessPlanViewSet(viewsets.ModelViewSet):
     queryset = FitnessPlan.objects.all()
     serializer_class = FitnessPlanSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class SessionPlanViewSet(viewsets.ModelViewSet):
     queryset = SessionPlan.objects.all()
     serializer_class = SessionPlanSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class TrainingViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
@@ -22,4 +22,4 @@ class TrainingViewSet(viewsets.ModelViewSet):
 class CustomizationViewSet(viewsets.ModelViewSet):
     queryset = Customization.objects.all()
     serializer_class = CustomizationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
