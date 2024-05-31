@@ -18,7 +18,6 @@ class Training(models.Model):
 class SessionPlan(models.Model):
     training_type = models.CharField(max_length=255)
     fitness_plan = models.ForeignKey(FitnessPlan, on_delete=models.CASCADE)
-    trainings = models.ManyToManyField(Training, through='SessionPlanTraining')
 
 class SessionPlanTraining(models.Model):
     session_plan = models.ForeignKey(SessionPlan, on_delete=models.CASCADE)
