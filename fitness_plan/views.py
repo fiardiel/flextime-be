@@ -7,19 +7,23 @@ from fitness_plan.serializers import FitnessPlanSerializer, TrainingSerializer, 
 class FitnessPlanViewSet(viewsets.ModelViewSet):
     queryset = FitnessPlan.objects.all()
     serializer_class = FitnessPlanSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class SessionPlanViewSet(viewsets.ModelViewSet):
     queryset = SessionPlan.objects.all()
     serializer_class = SessionPlanSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = SessionPlan.objects.all()
+        fitness_plan_id = self.request.query_params.get('fitness_plan_id', None)
+        if fitness_plan_id is not None:
+            queryset = queryset.filter(fitness_plan=fitness_plan_id)
+        return queryset
 
 class TrainingViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class CustomizationViewSet(viewsets.ModelViewSet):
     queryset = Customization.objects.all()
     serializer_class = CustomizationSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
