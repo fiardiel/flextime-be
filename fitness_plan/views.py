@@ -1,6 +1,6 @@
-from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionPlanTraining
+from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionTraining
 from rest_framework import viewsets, response, status
-from fitness_plan.serializers import FitnessPlanSerializer, TrainingSerializer, SessionPlanSerializer, CustomizationSerializer
+from fitness_plan.serializers import FitnessPlanSerializer, TrainingSerializer, SessionPlanSerializer, CustomizationSerializer, SessionTrainingSerializer
 
 
 class FitnessPlanViewSet(viewsets.ModelViewSet):
@@ -33,11 +33,11 @@ class CustomizationViewSet(viewsets.ModelViewSet):
     serializer_class = CustomizationSerializer
 
 class SessionTrainingViewSet(viewsets.ModelViewSet):
-    queryset = SessionPlan.objects.all()
-    serializer_class = SessionPlanSerializer
+    queryset = SessionTraining.objects.all()
+    serializer_class = SessionTrainingSerializer
 
     def get_queryset(self):
-        queryset = SessionPlanTraining.objects.all()
+        queryset = SessionTraining.objects.all()
         session_plan_id = self.request.query_params.get('session_plan_id', None)
         if session_plan_id is not None:
             queryset = queryset.filter(session_plan=session_plan_id)

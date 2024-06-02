@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionPlanTraining
+from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionTraining
 
 
 class FitnessPlanSerializer(serializers.ModelSerializer):
@@ -25,5 +25,5 @@ class CustomizationSerializer(serializers.ModelSerializer):
 
 class SessionTrainingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SessionPlanTraining
+        model = SessionTraining
         fields = '__all__'

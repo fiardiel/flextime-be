@@ -19,7 +19,7 @@ class SessionPlan(models.Model):
     training_type = models.CharField(max_length=255)
     fitness_plan = models.ForeignKey(FitnessPlan, on_delete=models.CASCADE)
 
-class SessionPlanTraining(models.Model):
+class SessionTraining(models.Model):
     session_plan = models.ForeignKey(SessionPlan, on_delete=models.CASCADE)
     training = models.ForeignKey(Training, on_delete=models.CASCADE)
     customization = models.OneToOneField(Customization, on_delete=models.CASCADE, null=True, blank=True)
