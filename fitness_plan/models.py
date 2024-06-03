@@ -23,6 +23,3 @@ class SessionTraining(models.Model):
     session_plan = models.ForeignKey(SessionPlan, on_delete=models.CASCADE)
     training = models.ForeignKey(Training, on_delete=models.CASCADE)
     customization = models.OneToOneField(Customization, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        unique_together = ('session_plan', 'training')
