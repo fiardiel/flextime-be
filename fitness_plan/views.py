@@ -12,10 +12,10 @@ class SessionPlanViewSet(viewsets.ModelViewSet):
     serializer_class = SessionPlanSerializer
 
     def get_queryset(self):
-        queryset = SessionPlan.objects.all()
-        session_plan_id = self.request.query_params.get('session_plan_id', None)
-        if session_plan_id is not None:
-            queryset = queryset.filter(fitness_plan=session_plan_id)
+        queryset = super().get_queryset()
+        fitness_plan_id = self.request.query_params.get('fitnessplan', None)
+        if fitness_plan_id is not None:
+            queryset = queryset.filter(fitness_plan=fitness_plan_id)
         return queryset
     
     def destroy(self, request, *args, **kwargs):
@@ -27,6 +27,13 @@ class SessionPlanViewSet(viewsets.ModelViewSet):
 class TrainingViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        training_type = self.request.query_params.get('training_type', None)
+        if training_type is not None:
+            queryset = queryset.filter(training_type=training_type)
+        return queryset
 
 class CustomizationViewSet(viewsets.ModelViewSet):
     queryset = Customization.objects.all()
@@ -38,7 +45,7 @@ class SessionTrainingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = SessionTraining.objects.all()
-        session_plan_id = self.request.query_params.get('session_plan_id', None)
+        session_plan_id = self.request.query_params.get('sessionplan', None)
         if session_plan_id is not None:
             queryset = queryset.filter(session_plan=session_plan_id)
         return queryset
