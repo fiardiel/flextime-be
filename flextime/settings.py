@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "main",
     "fitness_plan",
+    "course_plan",
 ]
 
 MIDDLEWARE = [

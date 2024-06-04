@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionTraining
 
