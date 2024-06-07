@@ -11,9 +11,9 @@ class CoursePlanViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         response_dict = {
             'course_plan': self.get_serializer(instance).data,
-            'class_schedules': ClassScheduleSerializer(instance.class_schedules.all(), many=True).data,
-            'test_schedules': TestScheduleSerializer(instance.test_schedules.all(), many=True).data,
-            'assignment_deadlines': AssignmentDeadlineSerializer(instance.assignment_deadlines.all(), many=True).data,
+            'class_schedules': ClassScheduleSerializer(instance.classschedule_set.all(), many=True).data,
+            'test_schedules': TestScheduleSerializer(instance.testschedule_set.all(), many=True).data,
+            'assignment_deadlines': AssignmentDeadlineSerializer(instance.assignmentdeadline_set.all(), many=True).data,
         }
         return response.Response(response_dict)
     
