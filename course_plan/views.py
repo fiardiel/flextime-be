@@ -49,11 +49,13 @@ class ClassScheduleViewSet(viewsets.ModelViewSet):
         if end_time <= start_time:
             return response.Response({'message': 'End time must be after start time'}, status=status.HTTP_400_BAD_REQUEST)
         
+        current_schedule_id = kwargs.get('pk')
+
         overlapping_schedules = ClassSchedule.objects.filter(
             start_time__lt=end_time,
             end_time__gt=start_time,
             class_day=day
-        )
+        ).exclude(id=current_schedule_id)
 
         if overlapping_schedules.exists():
             return response.Response({'message': 'Schedule overlaps with existing schedule'}, status=status.HTTP_400_BAD_REQUEST)
@@ -92,16 +94,17 @@ class TestScheduleViewSet(viewsets.ModelViewSet):
         if end_time <= start_time:
             return response.Response({'message': 'End time must be after start time'}, status=status.HTTP_400_BAD_REQUEST)
         
+        current_schedule_id = kwargs.get('pk')
+
         overlapping_schedules = TestSchedule.objects.filter(
             start_time__lt=end_time,
             end_time__gt=start_time,
             test_date=day
-        )
+        ).exclude(id=current_schedule_id) 
 
         if overlapping_schedules.exists():
             return response.Response({'message': 'Schedule overlaps with existing schedule'}, status=status.HTTP_400_BAD_REQUEST)
         
-
         return super().update(request, *args, **kwargs)
 
 
