@@ -1,6 +1,10 @@
 from rest_framework import serializers
-from course_plan.models import AssignmentDeadline, ClassSchedule, TestSchedule
+from course_plan.models import AssignmentDeadline, ClassSchedule, TestSchedule, CoursePlan
 
+class CoursePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoursePlan
+        fields = '__all__'
 
 class AssignmentDeadlineSerializer(serializers.ModelSerializer):
     class Meta:

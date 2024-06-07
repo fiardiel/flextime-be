@@ -22,7 +22,7 @@ class SessionPlanViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        fitness_plan_id = self.request.query_params.get('fitnessplan', None)
+        fitness_plan_id = self.request.query_params.get('fitness_plan', None)
         if fitness_plan_id is not None:
             queryset = queryset.filter(fitness_plan=fitness_plan_id)
         return queryset
@@ -54,7 +54,7 @@ class SessionTrainingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = SessionTraining.objects.all()
-        session_plan_id = self.request.query_params.get('sessionplan', None)
+        session_plan_id = self.request.query_params.get('session_plan', None)
         if session_plan_id is not None:
             queryset = queryset.filter(session_plan=session_plan_id)
         return queryset
