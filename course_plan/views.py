@@ -19,7 +19,7 @@ class CoursePlanViewSet(viewsets.ModelViewSet):
     
 
 class ClassScheduleViewSet(viewsets.ModelViewSet):
-    queryset = ClassSchedule.objects.all()
+    queryset = ClassSchedule.objects.all().order_by('class_day', 'start_time')
     serializer_class = ClassScheduleSerializer
     
     def create(self, request, *args, **kwargs):
