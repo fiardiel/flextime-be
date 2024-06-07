@@ -68,17 +68,17 @@ class TestScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = TestScheduleSerializer
 
     def create(self, request, *args, **kwargs):
-        start_time = request.data.get('start_time')
-        end_time = request.data.get('end_time')
-        day = request.data.get('test_date')
+        test_start = request.data.get('test_start')
+        test_end = request.data.get('test_end')
+        date = request.data.get('test_date')
 
-        if end_time <= start_time:
+        if test_end <= test_start:
             return response.Response({'message': 'End time must be after start time'}, status=status.HTTP_400_BAD_REQUEST)
         
         overlapping_schedules = TestSchedule.objects.filter(
-            start_time__lt=end_time,
-            end_time__gt=start_time,
-            test_date=day
+            test_start__lt=test_end,
+            test_end__gt=test_start,
+            test_date=date
         )
 
         if overlapping_schedules.exists():
@@ -87,19 +87,19 @@ class TestScheduleViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
     
     def update(self, request, *args, **kwargs):
-        start_time = request.data.get('start_time')
-        end_time = request.data.get('end_time')
-        day = request.data.get('test_date')
+        test_start = request.data.get('test_start')
+        test_end = request.data.get('test_end')
+        date = request.data.get('test_date')
 
-        if end_time <= start_time:
+        if test_end <= test_start:
             return response.Response({'message': 'End time must be after start time'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        current_schedule_id = kwargs.get('pk')
 
+        current_schedule_id = kwargs.get('pk')
+        
         overlapping_schedules = TestSchedule.objects.filter(
-            start_time__lt=end_time,
-            end_time__gt=start_time,
-            test_date=day
+            test_start__lt=test_end,
+            test_end__gt=test_start,
+            test_date=date
         ).exclude(id=current_schedule_id) 
 
         if overlapping_schedules.exists():
