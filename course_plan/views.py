@@ -6,6 +6,16 @@ from course_plan.serializers import AssignmentDeadlineSerializer, ClassScheduleS
 class CoursePlanViewSet(viewsets.ModelViewSet):
     queryset = CoursePlan.objects.all()
     serializer_class = CoursePlanSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        response_dict = {
+            'course_plan': self.get_serializer(instance).data,
+            'class_schedules': ClassScheduleSerializer(instance.class_schedules.all(), many=True).data,
+            'test_schedules': TestScheduleSerializer(instance.test_schedules.all(), many=True).data,
+            'assignment_deadlines': AssignmentDeadlineSerializer(instance.assignment_deadlines.all(), many=True).data,
+        }
+        return response.Response(response_dict)
     
 
 class ClassScheduleViewSet(viewsets.ModelViewSet):
