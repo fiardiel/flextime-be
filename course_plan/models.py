@@ -34,5 +34,6 @@ class TestSchedule(models.Model):
 
 class AssignmentDeadline(models.Model):
     assignment_name = models.CharField(max_length=255)
-    assignment_due_date = models.DateTimeField()
+    assignment_due_date = models.DateField()
+    assignment_due_time = models.TimeField()
     course_plan = models.ForeignKey(CoursePlan, on_delete=models.CASCADE)
