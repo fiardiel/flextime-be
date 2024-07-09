@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
+from fitness_plan.serializers import FitnessPlanSerializer, SessionPlanSerializer
 from main.models import ActivityPlan, SessionSchedule
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -15,6 +15,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ActivityPlanSerializer(serializers.ModelSerializer):
+    fitness_plan = FitnessPlanSerializer(read_only=True)
+
     class Meta:
         model = ActivityPlan
         fields = '__all__'
