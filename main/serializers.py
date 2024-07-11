@@ -15,8 +15,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ActivityPlanSerializer(serializers.ModelSerializer):
-    fitness_plan = FitnessPlanSerializer(read_only=True)
-
     class Meta:
         model = ActivityPlan
         fields = '__all__'
