@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User, Group
-from fitness_plan.serializers import FitnessPlanSerializer, SessionPlanSerializer
+from django.contrib.auth.models import Group
+from users.models import User
 from main.models import ActivityPlan, SessionSchedule
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

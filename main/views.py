@@ -1,5 +1,6 @@
 from datetime import datetime
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+from users.models import User
 from rest_framework.decorators import action
 from course_plan.models import ClassSchedule
 from fitness_plan.models import SessionPlan
