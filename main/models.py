@@ -6,7 +6,7 @@ from course_plan.models import CoursePlan
 class ActivityPlan(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course_plan = models.OneToOneField(CoursePlan, on_delete=models.CASCADE)
-    fitness_plan = models.OneToOneField(FitnessPlan, on_delete=models.CASCADE)
+    fitness_plan = models.OneToOneField(FitnessPlan, on_delete=models.CASCADE, null=True, blank=True)
 
 class SessionSchedule(models.Model):
     DAYS_OF_WEEK = [

@@ -1,11 +1,12 @@
 from course_plan.models import AssignmentDeadline, ClassSchedule, TestSchedule, CoursePlan
-from rest_framework import viewsets, response, status
+from rest_framework import viewsets, response, status, permissions
 from course_plan.serializers import AssignmentDeadlineSerializer, ClassScheduleSerializer, TestScheduleSerializer, CoursePlanSerializer
 
 
 class CoursePlanViewSet(viewsets.ModelViewSet):
     queryset = CoursePlan.objects.all()
     serializer_class = CoursePlanSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -21,6 +22,7 @@ class CoursePlanViewSet(viewsets.ModelViewSet):
 class ClassScheduleViewSet(viewsets.ModelViewSet):
     queryset = ClassSchedule.objects.all().order_by('class_day', 'start_time')
     serializer_class = ClassScheduleSerializer
+    permission_classes = [permissions.IsAuthenticated]
     
     def create(self, request, *args, **kwargs):
         start_time = request.data.get('start_time')
@@ -66,6 +68,7 @@ class ClassScheduleViewSet(viewsets.ModelViewSet):
 class TestScheduleViewSet(viewsets.ModelViewSet):
     queryset = TestSchedule.objects.all()
     serializer_class = TestScheduleSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         test_start = request.data.get('test_start')
@@ -111,3 +114,4 @@ class TestScheduleViewSet(viewsets.ModelViewSet):
 class AssignmentDeadlineViewSet(viewsets.ModelViewSet):
     queryset = AssignmentDeadline.objects.all()
     serializer_class = AssignmentDeadlineSerializer
+    permission_classes = [permissions.IsAuthenticated]
