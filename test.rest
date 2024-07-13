@@ -1,0 +1,3 @@
+GET http://127.0.0.1:8000/session-plan/?fitness_plan=2
+Content-Type: application/json
+Authorization: Token 70c8fb2ac4c78da20f500a47663d7a1baef14fcc

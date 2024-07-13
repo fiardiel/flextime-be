@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.models import Group
-from users.models import User
+from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from course_plan.models import ClassSchedule
 from fitness_plan.models import SessionPlan
@@ -8,13 +8,8 @@ from fitness_plan.serializers import SessionPlanSerializer
 from main.models import SessionSchedule, ActivityPlan
 from course_plan.models import AssignmentDeadline, ClassSchedule, TestSchedule
 from rest_framework import viewsets, permissions, response, status
-from main.serializers import UserSerializer, GroupSerializer, SessionScheduleSerializer, ActivityPlanSerializer
+from main.serializers import GroupSerializer, SessionScheduleSerializer, ActivityPlanSerializer
 from course_plan.serializers import AssignmentDeadlineSerializer, ClassScheduleSerializer, TestScheduleSerializer
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()

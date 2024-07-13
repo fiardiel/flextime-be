@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+from django.contrib.auth.models import User
 from fitness_plan.models import SessionPlan, FitnessPlan
 from course_plan.models import CoursePlan
 

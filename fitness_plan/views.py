@@ -1,6 +1,7 @@
 from fitness_plan.models import FitnessPlan, Training, SessionPlan, Customization, SessionTraining
 from rest_framework import viewsets, response, status, permissions
 from fitness_plan.serializers import FitnessPlanSerializer, SessionPlanSerializer, CustomizationSerializer, SessionTrainingSerializer, TrainingSerializer
+from rest_framework.response import Response
 from django.db.models import F, Sum
 from rest_framework.decorators import action
 from fitness_plan.permissions import IsOwner, IsOwnerOfFitnessPlan, IsOwnerOfSessionPlan, IsOwnerOfSessionTraining
@@ -18,6 +19,16 @@ class FitnessPlanViewSet(viewsets.ModelViewSet):
         if 'user' in serializer.validated_data and serializer.validated_data['user'] != self.request.user:
             raise PermissionDenied("You don't have access for creating this fitness plan")
         serializer.save(user=self.request.user)
+
+    @action(detail=False, methods=['GET'])
+    def get_fitness_plan_by_user(self, request):
+        user = request.user
+        try:
+            fitness_plan = FitnessPlan.objects.get(user=user)
+            serialized_fitness_plan = FitnessPlanSerializer(fitness_plan).data
+            return Response(serialized_fitness_plan)
+        except FitnessPlan.DoesNotExist:
+            return Response({'error': 'Fitness plan not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class SessionPlanViewSet(viewsets.ModelViewSet):
     queryset = SessionPlan.objects.all()
