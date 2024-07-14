@@ -4,16 +4,13 @@ from fitness_plan.serializers import FitnessPlanSerializer, SessionPlanSerialize
 from rest_framework.response import Response
 from django.db.models import F, Sum
 from rest_framework.decorators import action
-from fitness_plan.permissions import IsOwner, IsOwnerOfFitnessPlan, IsOwnerOfSessionPlan, IsOwnerOfSessionTraining
+from fitness_plan.permissions import IsOwner, IsOwnerOfFitnessPlan, IsOwnerOfSessionPlan, IsOwnerOfSessionTraining, IsTrainingAdmin
 from rest_framework.exceptions import PermissionDenied
 
 class FitnessPlanViewSet(viewsets.ModelViewSet):
     queryset = FitnessPlan.objects.all()
     serializer_class = FitnessPlanSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-    def get_queryset(self):
-        return FitnessPlan.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
         if 'user' in serializer.validated_data and serializer.validated_data['user'] != self.request.user:
@@ -65,7 +62,7 @@ class SessionPlanViewSet(viewsets.ModelViewSet):
 class TrainingViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsTrainingAdmin]
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -98,3 +95,9 @@ class SessionTrainingViewSet(viewsets.ModelViewSet):
         if session_plan_id is not None:
             queryset = queryset.filter(session_plan=session_plan_id)
         return queryset
+    
+    @action(detail=False, methods=['get'])
+    def count(self, request):
+        queryset = self.get_queryset()
+        count = queryset.count()
+        return response.Response({'count': count})
