@@ -169,3 +169,31 @@ class AssignmentDeadlineViewSet(viewsets.ModelViewSet):
     queryset = AssignmentDeadline.objects.all()
     serializer_class = AssignmentDeadlineSerializer
     permission_classes = [permissions.IsAuthenticated, IsCoursePlanOwnerOrAdmin]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            return AssignmentDeadline.objects.all()
+        return AssignmentDeadline.objects.filter(course_plan__user=user)
+    
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            course_plan = CoursePlan.objects.get(user=user)
+        except CoursePlan.DoesNotExist:
+            return response.Response({'message': 'Course plan does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        request.data['course_plan'] = course_plan.id
+
+        return super().create(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            course_plan = CoursePlan.objects.get(user=user)
+        except CoursePlan.DoesNotExist:
+            return response.Response({'message': 'Course plan does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        request.data['course_plan'] = course_plan.id
+
+        return super().update(request, *args, **kwargs)
