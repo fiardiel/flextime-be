@@ -6,16 +6,33 @@ from django.db.models import F, Sum
 from rest_framework.decorators import action
 from fitness_plan.permissions import IsOwner, IsOwnerOfFitnessPlan, IsOwnerOfSessionPlan, IsOwnerOfSessionTraining, IsTrainingAdmin
 from rest_framework.exceptions import PermissionDenied
+from main.models import ActivityPlan
 
 class FitnessPlanViewSet(viewsets.ModelViewSet):
     queryset = FitnessPlan.objects.all()
     serializer_class = FitnessPlanSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        queryset = self.filter_queryset(self.get_queryset())
+        if user.is_staff or user.is_superuser:
+            queryset = FitnessPlan.objects.all()
+            serialized_data = self.get_serializer(queryset, many=True).data
+            return Response(serialized_data)
+        else:
+            fitness_plan = FitnessPlan.objects.filter(user=user).first()
+            serializer = self.get_serializer(fitness_plan)
+            return Response(serializer.data)
+
     
     def perform_create(self, serializer):
         if 'user' in serializer.validated_data and serializer.validated_data['user'] != self.request.user:
             raise PermissionDenied("You don't have access for creating this fitness plan")
         serializer.save(user=self.request.user)
+        activity_plan = ActivityPlan.objects.get(user=self.request.user)
+        activity_plan.fitness_plan = serializer.instance
+        activity_plan.save()
 
     @action(detail=False, methods=['GET'])
     def get_fitness_plan_by_user(self, request):
@@ -98,6 +115,9 @@ class SessionTrainingViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def count(self, request):
-        queryset = self.get_queryset()
-        count = queryset.count()
-        return response.Response({'count': count})
+        session_plan_id = request.GET.get('session_plan', None)
+        if session_plan_id is not None:
+            queryset = SessionTraining.objects.filter(session_plan=session_plan_id)
+            count = queryset.count()
+            return response.Response({'count': count})
+        return response.Response({'message': 'Session plan not found'}, status=status.HTTP_404_NOT_FOUND)
