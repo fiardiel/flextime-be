@@ -145,7 +145,8 @@ class SessionScheduleViewSet(viewsets.ModelViewSet):
         overlapping_schedules = SessionSchedule.objects.filter(
             start_time__lt=end_time,
             end_time__gt=start_time,
-            day=day
+            day=day,
+            activity_plan=activity_plan
         ).exclude(id=session_schedule_id)
 
         if overlapping_schedules.exists() or overlapping_classes.exists():
