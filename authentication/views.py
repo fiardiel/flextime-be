@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from course_plan.models import CoursePlan
+from main.models import ActivityPlan
 
 @api_view(['POST'])
 def login(request):
@@ -26,6 +28,11 @@ def register(request):
         user.set_password(request.data['password'])
         user.save()
         token = Token.objects.create(user=user)
+
+        course_plan = CoursePlan.objects.create(user=user)
+        activity_plan = ActivityPlan.objects.create(course_plan=course_plan, user=user) 
+        course_plan.save(), activity_plan.save()
+
         return Response({"token": token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
