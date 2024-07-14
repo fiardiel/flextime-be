@@ -38,3 +38,15 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response({"message": f"passed for {request.user.email}", "user_id": request.user.id})
+
+
+# create a view for admins to look at the users and their roles
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def get_users(request):
+    if not request.user.is_staff or not request.user.is_superuser:
+        return Response({"detail": "Not Authorized"}, status=status.HTTP_401_UNAUTHORIZED)
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
