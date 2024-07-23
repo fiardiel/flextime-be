@@ -22,6 +22,8 @@ class FitnessPlanViewSet(viewsets.ModelViewSet):
             return Response(serialized_data)
         else:
             fitness_plan = FitnessPlan.objects.filter(user=user).first()
+            if fitness_plan is None:
+                return Response({})
             serializer = self.get_serializer(fitness_plan)
             return Response(serializer.data)
 

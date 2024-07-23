@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from authentication.views import login, register, logout, test_token, get_users
+from authentication.views import check_admin, login, register, logout, test_token, get_users
 
 urlpatterns = [
     re_path('login', login),
@@ -7,4 +7,5 @@ urlpatterns = [
     re_path('logout', logout),
     re_path('get_users', get_users),    
     re_path('test_token', test_token),
+    re_path('check_admin', check_admin),
 ]

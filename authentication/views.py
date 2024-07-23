@@ -31,7 +31,8 @@ def register(request):
 
         course_plan = CoursePlan.objects.create(user=user)
         activity_plan = ActivityPlan.objects.create(course_plan=course_plan, user=user) 
-        course_plan.save(), activity_plan.save()
+        course_plan.save() 
+        activity_plan.save()
 
         return Response({"token": token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -57,3 +58,9 @@ def get_users(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def check_admin(request):
+    return Response({"is_admin": request.user.is_staff or request.user.is_superuser})

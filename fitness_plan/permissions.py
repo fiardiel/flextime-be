@@ -18,7 +18,7 @@ class IsOwnerOfSessionTraining(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         customization_id = obj.id
         session_training = SessionTraining.objects.filter(customization=customization_id).first()
-        return session_training.session_plan.fitness_plan.user == request.user or request.user.is_staff or request.user.is_superuser
+        return session_training.session_plan.fitness_plan.user == request.user or request.user.is_staff or request.user.is_superuser # type: ignore
     
 class IsTrainingAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
